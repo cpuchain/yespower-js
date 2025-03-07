@@ -1,6 +1,6 @@
 {
     "name": "yespower-wasm",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "WebAssembly module for Yespower",
     "license": "MIT",
     "author": "CPUchain",
@@ -16,7 +16,7 @@
         "lint": "eslint src/**/*.ts scripts/**/*.ts test/*.ts --ignore-pattern src/*.d.ts",
         "build:wasm-bundle": "ts-node scripts/bundle.ts",
         "build:wasm-beautify": "js-beautify src/yespower_wasm.js -o src/yespower_wasm.js",
-        "build:wasm": "emcc ../yespower-c/yespower-opt.c ../yespower-c/yespower.c ../yespower-c/sha256.c -O3 -s WASM=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=\"['_yespower_wasm', '_malloc', '_free']\" -s EXPORTED_RUNTIME_METHODS=\"['ccall', 'cwrap']\" -s EXPORT_NAME=\"yespower_wasm\" -o src/yespower_wasm.js --emit-tsd yespower_wasm.js.d.ts && yarn build:wasm-beautify && yarn build:wasm-bundle",
+        "build:wasm": "emcc ../yespower-c/yespower-opt.c ../yespower-c/yespower.c ../yespower-c/sha256.c -O3 -s WASM=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=\"['_yespower_wasm', '_malloc', '_free']\" -s EXPORTED_RUNTIME_METHODS=\"['ccall', 'cwrap']\" -s EXPORT_NAME=\"yespower_wasm\" -s INITIAL_HEAP=\"33554432\" -o src/yespower_wasm.js --emit-tsd yespower_wasm.js.d.ts && yarn build:wasm-beautify && yarn build:wasm-bundle",
         "build:types": "tsc --declaration --emitDeclarationOnly -p tsconfig.build.json",
         "build": "yarn build:types && webpack",
         "bench": "node scripts/bench.js",

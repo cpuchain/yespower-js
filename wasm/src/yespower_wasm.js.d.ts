@@ -26,7 +26,7 @@ declare namespace RuntimeExports {
     let HEAPU64: any;
 }
 interface WasmModule {
-  _yespower_wasm(_0: number, _1: number, _2: number, _3: number): number;
+  _yespower_wasm(_0: number, _1: number, _2: number, _3: number, _4: number, _5: number): number;
   _malloc(_0: number): number;
   _free(_0: number): void;
 }

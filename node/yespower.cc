@@ -27,17 +27,37 @@ NAN_METHOD(yespower) {
     char* input = node::Buffer::Data(target);
     uint32_t input_len = node::Buffer::Length(target);
 
+    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
+
+    uint32_t N = 2048;
+
+    if (info[1]->IsNumber()) {
+        v8::Maybe<uint32_t> maybe_uint = info[1]->Uint32Value(context);
+        if (maybe_uint.IsJust()) {
+            N = maybe_uint.FromJust();
+        }
+    }
+
+    uint32_t r = 32;
+
+    if (info[2]->IsNumber()) {
+        v8::Maybe<uint32_t> maybe_uint = info[2]->Uint32Value(context);
+        if (maybe_uint.IsJust()) {
+            r = maybe_uint.FromJust();
+        }
+    }
+
     char *pers;
     uint32_t pers_len = 0;
 
-    if (info[1]->IsString()) {
-        pers = (char*)*Nan::Utf8String(info[1]);
+    if (info[3]->IsString()) {
+        pers = (char*)*Nan::Utf8String(info[3]);
         pers_len = strlen(pers);
     }
 
     char output[32];
 
-    yespower_hash(input, input_len, pers, pers_len, output);
+    yespower_hash(input, input_len, N, r, pers, pers_len, output);
 
     info.GetReturnValue().Set(Nan::CopyBuffer(output, 32).ToLocalChecked());
 }

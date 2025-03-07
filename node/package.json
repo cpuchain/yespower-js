@@ -1,6 +1,6 @@
 {
     "name": "yespower",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Node.js bindings of the Yespower hashing algorithm",
     "license": "BSD 2-Clause",
     "author": "Alexander Peslyak",
@@ -18,6 +18,6 @@
     },
     "dependencies": {
         "bindings": "*",
-        "nan": "^2.7.0"
+        "nan": "^2.22.2"
     }
 }

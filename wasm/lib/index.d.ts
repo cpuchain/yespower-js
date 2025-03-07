@@ -1,6 +1,6 @@
-import yespower_wasm, { MainModule } from './yespower_wasm.js';
+import { MainModule } from './yespower_wasm.js';
 export * from './utils';
-type yespower_wasm = (input: number, inputLen: number, pers: string, persLen: number) => number;
+type yespower_wasm = (input: number, inputLen: number, N: number, r: number, pers: string, persLen: number) => number;
 export declare class Yespower {
     nByte: number;
     Module: MainModule;
@@ -10,5 +10,5 @@ export declare class Yespower {
     arrayToPtr(array: Uint8Array): number;
     ptrToArray(ptr: number, length: number): Uint8Array;
     freePtr(ptr: number): void;
-    Hash(input: Uint8Array, pers?: string): Uint8Array;
+    Hash(input: Uint8Array, N?: number, r?: number, pers?: string): Uint8Array;
 }

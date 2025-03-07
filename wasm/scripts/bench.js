@@ -2,6 +2,9 @@ const { Yespower } = require('../lib');
 
 const tests = 30;
 
+const N = 1024;
+const r = 8;
+
 async function bench() {
     const yespower = await Yespower.init();
 
@@ -10,7 +13,7 @@ async function bench() {
     for (let i = 0; i < tests; ++i) {
         const buf = Buffer.allocUnsafe(4);
         buf.writeUint32BE(i)
-        yespower.Hash(buf);
+        yespower.Hash(buf, N, r);
     }
 
     const timeTook = Date.now() - timeStart;

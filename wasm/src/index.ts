@@ -1,10 +1,17 @@
 import { bundled } from './bundled';
 import { base64ToBytes } from './utils';
-import yespower_wasm, { MainModule } from './yespower_wasm.js';
+import yespowerWasm, { MainModule } from './yespower_wasm.js';
 
 export * from './utils';
 
-type yespower_wasm = (input: number, inputLen: number, pers: string, persLen: number) => number;
+type yespower_wasm = (
+    input: number,
+    inputLen: number,
+    N: number,
+    r: number,
+    pers: string,
+    persLen: number,
+) => number;
 
 export class Yespower {
     nByte: number;
@@ -15,6 +22,8 @@ export class Yespower {
         this.nByte = 1;
         this.Module = Module;
         this.yespower_wasm = this.Module.cwrap('yespower_wasm', undefined, [
+            'number',
+            'number',
             'number',
             'number',
             'string',
@@ -30,7 +39,7 @@ export class Yespower {
 
         const wasmBinary = base64ToBytes(bundled);
 
-        const module = await yespower_wasm({
+        const module = await yespowerWasm({
             wasmBinary,
             locateFile: (file: string) => file,
         });
@@ -58,9 +67,9 @@ export class Yespower {
         this.Module._free(ptr);
     }
 
-    Hash(input: Uint8Array, pers = ''): Uint8Array {
+    Hash(input: Uint8Array, N = 2048, r = 32, pers = ''): Uint8Array {
         const inputPtr = this.arrayToPtr(input);
-        const ptr = this.yespower_wasm(inputPtr, input.length, pers, pers.length);
+        const ptr = this.yespower_wasm(inputPtr, input.length, N, r, pers, pers.length);
         const hash = this.ptrToArray(ptr, 32);
         this.freePtr(inputPtr);
         this.freePtr(ptr);
