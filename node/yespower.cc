@@ -1,56 +1,37 @@
-#include <node.h>
-#include <node_buffer.h>
-#include <v8.h>
 #include <nan.h>
 
 extern "C" {
     #include "../yespower-c/yespower.h"
 }
 
-using namespace node;
-using namespace Nan;
-using namespace v8;
-
 NAN_METHOD(yespower) {
-    if(info.Length() < 1) {
-        Nan::ThrowError("You must provide at least one argument.");
-        return;
+    if (info.Length() < 1 || !node::Buffer::HasInstance(info[0])) {
+        return Nan::ThrowTypeError("First argument must be a Buffer");
     }
 
-    Local<Object> target = Nan::To<Object>(info[0]).ToLocalChecked();
+    // Input buffer
+    char* input = node::Buffer::Data(info[0]);
+    uint32_t input_len = node::Buffer::Length(info[0]);
 
-    if(!node::Buffer::HasInstance(target)) {
-        Nan::ThrowError("Argument should be a buffer object.");
-        return;
-    }
-
-    char* input = node::Buffer::Data(target);
-    uint32_t input_len = node::Buffer::Length(target);
-
-    v8::Local<v8::Context> context = info.GetIsolate()->GetCurrentContext();
-
+    // Optional N (default: 2048)
     uint32_t N = 2048;
 
-    if (info[1]->IsNumber()) {
-        v8::Maybe<uint32_t> maybe_uint = info[1]->Uint32Value(context);
-        if (maybe_uint.IsJust()) {
-            N = maybe_uint.FromJust();
-        }
+    if (info.Length() > 1 && info[1]->IsUint32()) {
+        N = Nan::To<uint32_t>(info[1]).FromJust();
     }
 
+    // Optional r (default: 32)
     uint32_t r = 32;
 
-    if (info[2]->IsNumber()) {
-        v8::Maybe<uint32_t> maybe_uint = info[2]->Uint32Value(context);
-        if (maybe_uint.IsJust()) {
-            r = maybe_uint.FromJust();
-        }
+    if (info.Length() > 2 && info[2]->IsUint32()) {
+        r = Nan::To<uint32_t>(info[2]).FromJust();
     }
 
-    char *pers;
+    // Optional pers (default: null)
+    char* pers = nullptr;
     uint32_t pers_len = 0;
 
-    if (info[3]->IsString()) {
+    if (info.Length() > 3 && info[3]->IsString()) {
         pers = (char*)*Nan::Utf8String(info[3]);
         pers_len = strlen(pers);
     }
@@ -62,9 +43,8 @@ NAN_METHOD(yespower) {
     info.GetReturnValue().Set(Nan::CopyBuffer(output, 32).ToLocalChecked());
 }
 
-NAN_MODULE_INIT(init)
-{
-    NAN_EXPORT(target, yespower);
+NAN_MODULE_INIT(init) {
+    Nan::Export(target, "yespower", yespower);
 }
 
-NAN_MODULE_WORKER_ENABLED(yespower, init);
+NODE_MODULE(yespower, init)
