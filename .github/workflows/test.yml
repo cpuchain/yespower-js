@@ -17,14 +17,13 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: cd node
-        run: cd node
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+        working-directory: ./node
 
       - name: Run tests
         run: yarn test
+        working-directory: ./node
 
   test-wasm:
     name: Run Yespower Tests (WASM)
@@ -39,11 +38,10 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: cd wasm
-        run: cd wasm
-
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+        working-directory: ./wasm
 
       - name: Run tests
         run: yarn test
+        working-directory: ./wasm
