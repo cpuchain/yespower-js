@@ -40,7 +40,7 @@ const cases = [
         output: '1f0269acf565c49adc0ef9b8f26ab3808cdc38394a254fddeedcc3aacff6ad9d',
         N: 1024,
         r: 32,
-        pers: 'personality test',
+        pers: Buffer.from('personality test'),
     },
     {
         input: 'eebb7bf9a8c813b5e0a03ce627bd1a0c836e0a89793743666dc82b83e28e8f00',
@@ -165,27 +165,27 @@ const cases = [
     {
         input: '2538dad623dab29a3d5387804ab51dea411014fad9c47fb94b2d83e44358064b',
         output: '62c4ac19375787857e2e7c41282a58fb68638a25ba27402239edc8d2683b5126',
-        pers: 'pers',
+        pers: Buffer.from('pers'),
     },
     {
         input: '28d5ce4e064ddc5ecf7a62a65d245facb3b46d6d2d70cdcf5c413e1c4e205157',
         output: '9f82d3a2d796ac89aa012c71ccad798f5e10cf515dd6fb0fedceb44271029d43',
-        pers: 'pers',
+        pers: Buffer.from('pers'),
     },
     {
         input: '172aaa13d4b7d606134bc6989a84c403bac3b6c4f9f4504dd79b2618c11c63d3',
         output: '5bd719de97d5dbc0012bd576f778994ae9d3eeb31e12cfadeb58133a34c2ebef',
-        pers: 'pers',
+        pers: Buffer.from('pers'),
     },
     {
         input: 'c9d4866805b9e9788cf1c7f6a369e8932e5bc6e32a5c7a06c3ecb7e0ec8ebaff',
         output: 'ac22b64773effd8d0dbb088bd71b27449ec5c8c21ecc0262f615e920ea2df2a6',
-        pers: 'pers',
+        pers: Buffer.from('pers'),
     },
     {
         input: 'fae4f16aed075d1e94b6d913242840ad3933bc675aa72f2f647f1df60c431963',
         output: 'a625f58d4585b8bad21509f34f715f6a15a5e2741a89642e937587b5c4b68e8a',
-        pers: 'pers',
+        pers: Buffer.from('pers'),
     },
 ];
 
