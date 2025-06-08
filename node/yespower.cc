@@ -1,50 +1,55 @@
-#include <nan.h>
+#include <napi.h>
 
 extern "C" {
     #include "../yespower-c/yespower.h"
 }
 
-NAN_METHOD(yespower) {
-    if (info.Length() < 1 || !node::Buffer::HasInstance(info[0])) {
-        return Nan::ThrowTypeError("First argument must be a Buffer");
+Napi::Value YespowerFunc(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
+
+    // Check input buffer
+    if (info.Length() < 1 || !info[0].IsBuffer()) {
+        Napi::TypeError::New(env, "First argument must be a Buffer").ThrowAsJavaScriptException();
+        return env.Null();
     }
 
     // Input buffer
-    char* input = node::Buffer::Data(info[0]);
-    uint32_t input_len = node::Buffer::Length(info[0]);
+    char* input = reinterpret_cast<char*>(info[0].As<Napi::Buffer<char>>().Data());
+    uint32_t input_len = info[0].As<Napi::Buffer<char>>().Length();
 
     // Optional N (default: 2048)
     uint32_t N = 2048;
-
-    if (info.Length() > 1 && info[1]->IsUint32()) {
-        N = Nan::To<uint32_t>(info[1]).FromJust();
+    if (info.Length() > 1 && info[1].IsNumber()) {
+        N = info[1].As<Napi::Number>().Uint32Value();
     }
 
     // Optional r (default: 32)
     uint32_t r = 32;
-
-    if (info.Length() > 2 && info[2]->IsUint32()) {
-        r = Nan::To<uint32_t>(info[2]).FromJust();
+    if (info.Length() > 2 && info[2].IsNumber()) {
+        r = info[2].As<Napi::Number>().Uint32Value();
     }
 
     // Optional pers (default: null)
     char* pers = nullptr;
     uint32_t pers_len = 0;
+    if (info.Length() > 3 && info[3].IsString()) {
+        std::string jsStr = info[3].As<Napi::String>();
 
-    if (info.Length() > 3 && info[3]->IsString()) {
-        pers = (char*)*Nan::Utf8String(info[3]);
-        pers_len = strlen(pers);
+        pers = (char*)std::malloc(jsStr.length() + 1);
+        std::strcpy(pers, jsStr.c_str());
+        pers_len = jsStr.size();
     }
 
     char output[32];
 
     yespower_hash(input, input_len, N, r, pers, pers_len, output);
 
-    info.GetReturnValue().Set(Nan::CopyBuffer(output, 32).ToLocalChecked());
+    return Napi::Buffer<char>::Copy(env, output, 32);
 }
 
-NAN_MODULE_INIT(init) {
-    Nan::Export(target, "yespower", yespower);
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
+    exports.Set("yespower", Napi::Function::New(env, YespowerFunc));
+    return exports;
 }
 
-NODE_MODULE(yespower, init)
+NODE_API_MODULE(yespower, Init)

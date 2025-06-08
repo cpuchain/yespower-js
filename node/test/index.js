@@ -193,7 +193,7 @@ describe('Yespower', () => {
     it('Test Cases', () => {
         for (const { input, output, N, r, pers } of cases) {
             const hashed = yespower(Buffer.from(input, 'hex'), N, r, pers);
-            
+
             assert.strictEqual(output, hashed.toString('hex'));
         }
     });

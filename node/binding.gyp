@@ -9,11 +9,12 @@
                 "../yespower-c/yespower-opt.c",
             ],
             "include_dirs": [
-                "<!(node -e \"require('nan')\")"
+                "<!@(node -p \"require('node-addon-api').include\")"
             ],
             "cflags_cc": [
                 "-std=c++17"
             ],
+            "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"]
         }
     ]
 }
