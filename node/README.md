@@ -1,6 +1,8 @@
 Yespower for Node.js
 ============================
 
+[![NPM Version](https://img.shields.io/npm/v/yespower)](https://www.npmjs.com/package/yespower)
+
 ## Prerequisites
 
 * Node.js LTS

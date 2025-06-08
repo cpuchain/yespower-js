@@ -1,5 +1,7 @@
 # Yespower WebAssembly Module
 
+[![NPM Version](https://img.shields.io/npm/v/yespower-wasm)](https://www.npmjs.com/package/yespower-wasm)
+
 Yespower WebAssembly Module for Browsers / Node.js
 
 ## Prerequisites
