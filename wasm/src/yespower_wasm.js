@@ -468,7 +468,7 @@ var yespower_wasm = (() => {
             var wasmExports = await createWasm();
             var ___wasm_call_ctors = wasmExports["e"];
             var _yespower_wasm = Module["_yespower_wasm"] = wasmExports["f"];
-            var _malloc = Module["_malloc"] = wasmExports["h"];
+            var _malloc = Module["_malloc"] = wasmExports["g"];
             var _free = Module["_free"] = wasmExports["i"];
             var __emscripten_stack_restore = wasmExports["j"];
             var __emscripten_stack_alloc = wasmExports["k"];

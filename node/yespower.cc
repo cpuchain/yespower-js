@@ -40,9 +40,7 @@ Napi::Value YespowerFunc(const Napi::CallbackInfo& info) {
         pers_len = jsStr.size();
     }
 
-    char output[32];
-
-    yespower_hash(input, input_len, N, r, pers, pers_len, output);
+    const char* output = yespower_wasm(input, input_len, N, r, pers, pers_len);
 
     return Napi::Buffer<char>::Copy(env, output, 32);
 }
